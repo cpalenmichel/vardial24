@@ -79,8 +79,7 @@ def train_model():
 
     num_labels = len(label2id)
     model = BertForMultilabelSequenceClassification.from_pretrained(model_ckpt,
-                                                                    num_labels=num_labels).to(
-        'cuda')
+                                                                    num_labels=num_labels)
 
     # def accuracy_thresh(y_pred, y_true, thresh=0.5, sigmoid=True):
     #     # TODO: Need to switch this to compute Macro-F1 or get setup to just run inference and score later.

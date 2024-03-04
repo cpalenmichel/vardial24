@@ -19,8 +19,8 @@ def train_model():
     parser.add_argument("--test", default=None)
     parser.add_argument("--model", default="distilbert-base-uncased")
     parser.add_argument("--batchsize", default=8)
-    parser.add_argument("--learning-rate", default=2e-5)
-    parser.add_argument("--epochs", default=3)
+    parser.add_argument("--learning-rate", default=2e-5, type=float)
+    parser.add_argument("--epochs", default=3, type=int)
 
     args = parser.parse_args()
 

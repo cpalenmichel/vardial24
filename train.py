@@ -27,7 +27,7 @@ def train_model():
     model_ckpt = args.model
 
     en_dataset_path_train = args.train
-    en_dataset_path_dev = args.test
+    en_dataset_path_dev = args.test if args.test else args.dev
     # pd_dataset = pd.read_csv(en_dataset_path, sep='\t')
     train_dataset = load_dataset('csv', data_files=[
         en_dataset_path_train,

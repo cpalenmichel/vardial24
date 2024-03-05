@@ -1,3 +1,4 @@
+import os
 from argparse import ArgumentParser
 
 import torch
@@ -127,7 +128,7 @@ def train_model():
 
     batch_size = args.batchsize
 
-    args = TrainingArguments(
+    training_args = TrainingArguments(
         output_dir=args.outdir,
         evaluation_strategy="epoch",
         learning_rate=args.learning_rate,
@@ -139,7 +140,7 @@ def train_model():
 
     trainer = Trainer(
         model,
-        args,
+        training_args,
         train_dataset=ds_enc["train"],
         eval_dataset=ds_enc["test"],
         compute_metrics=compute_metrics,
@@ -147,9 +148,11 @@ def train_model():
 
     trainer.train()
     trainer.evaluate()
-    predictions = trainer.predict(test_dataset=DatasetDict["test"])
-    # TODO: Run on test set and write to files if predict doesn't already do that
-
+    predictions = trainer.predict(test_dataset=ds_enc["test"])
+    
+    with open(os.path.join(args.outdir, 'predictions.txt'), 'w', encoding='utf8') as outfile:
+        for pred in predictions.predictions:
+            print(",".join([id2label[idx]  for idx in range(len(pred)) if pred[idx] == 1]), file=outfile)
 
 if __name__ == "__main__":
     train_model()

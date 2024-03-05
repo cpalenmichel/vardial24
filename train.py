@@ -19,7 +19,7 @@ def train_model():
     parser.add_argument("--outdir", required=True)
     parser.add_argument("--test", default=None)
     parser.add_argument("--model", default="distilbert-base-uncased")
-    parser.add_argument("--batchsize", default=8)
+    parser.add_argument("--batchsize", default=8, type=int)
     parser.add_argument("--learning-rate", default=2e-5, type=float)
     parser.add_argument("--epochs", default=3, type=int)
 
@@ -149,7 +149,7 @@ def train_model():
     trainer.train()
     trainer.evaluate()
     predictions = trainer.predict(test_dataset=ds_enc["test"])
-    
+
     with open(os.path.join(args.outdir, 'predictions.txt'), 'w', encoding='utf8') as outfile:
         for pred in predictions.predictions:
             print(",".join([id2label[idx]  for idx in range(len(pred)) if pred[idx] == 1]), file=outfile)

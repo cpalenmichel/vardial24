@@ -153,7 +153,7 @@ def train_model():
     sigmoid = torch.nn.Sigmoid()
     with open(os.path.join(args.outdir, 'predictions.txt'), 'w', encoding='utf8') as outfile:
         for pred in predictions.predictions:
-            probs = sigmoid(torch.Tensor(predictions))
+            probs = sigmoid(torch.Tensor(pred))
             threshed_pred = np.zeros(probs.shape)
             threshed_pred[np.where(probs >= 0.5)] = 1
             print(",".join([id2label[idx]  for idx in range(len(pred)) if pred[idx] == 1]), file=outfile)

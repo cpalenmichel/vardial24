@@ -55,7 +55,8 @@ def train_model():
     label_set = set()
     for split in en_dataset:
         for example in en_dataset[split]:
-            label_set.add(example["label"])
+            for lab in example["label"].split(","):
+                label_set.add(lab)
 
     id2label = {i: label for i, label in enumerate(sorted(label_set))}
     label2id = {label: idx for idx, label in id2label.items()}
@@ -156,7 +157,8 @@ def train_model():
             probs = sigmoid(torch.Tensor(pred))
             threshed_pred = np.zeros(probs.shape)
             threshed_pred[np.where(probs >= 0.5)] = 1
-            print(",".join([id2label[idx]  for idx in range(len(pred)) if pred[idx] == 1]), file=outfile)
+            print(",".join([id2label[idx]  for idx in range(len(pred)) if threshed_pred[idx] == 1]), file=outfile)
+
 
 if __name__ == "__main__":
     train_model()

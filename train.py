@@ -49,7 +49,7 @@ def train_model():
         ], delimiter='\t',
                                    column_names=["label", "text"]
                                    )
-        en_dataset = DatasetDict({"train": train_dataset["train"], "test": test_dataset,
+        en_dataset = DatasetDict({"train": train_dataset["train"], "test": test_dataset['train'],
                                   "validation": dev_dataset['train']})
 
     label_set = set()
@@ -152,6 +152,7 @@ def train_model():
 
     with open(os.path.join(args.outdir, 'predictions.txt'), 'w', encoding='utf8') as outfile:
         for pred in predictions.predictions:
+            print(pred)
             print(",".join([id2label[idx]  for idx in range(len(pred)) if pred[idx] == 1]), file=outfile)
 
 if __name__ == "__main__":

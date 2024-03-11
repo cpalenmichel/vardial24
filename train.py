@@ -44,6 +44,7 @@ def train_model():
                                column_names=["label", "text"]
                                )
     if not args.test:
+        # "train" here as key is because hf loads all non-split datasets as "train", idk why
         en_dataset = DatasetDict({"train": train_dataset["train"], "test": dev_dataset['train'],
                               "validation": dev_dataset['train']})
     else:
@@ -70,6 +71,7 @@ def train_model():
 
     en_dataset = en_dataset.map(
         lambda x: {"labels": [x[c] for c in label2id if c != "text" and c != "label"]})
+    print(en_dataset)
 
     # Segmentation for BCMS mainly since it contains multiple sentences
     if args.segment:
@@ -102,7 +104,7 @@ def train_model():
                 new_example["orig_idx"] = i
                 new_data.append(new_example)
         en_dataset["test"] = Dataset.from_list(new_data)
-
+        print("Segmented: ", en_dataset)
     tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
 
     def tokenize_and_encode(examples):

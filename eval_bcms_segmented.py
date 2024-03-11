@@ -13,7 +13,7 @@ def run_eval():
 
     parser = ArgumentParser()
     parser.add_argument("model")
-    parser.add_argument("---traindata")
+    parser.add_argument("--traindata")
     parser.add_argument("--evaldata")
     parser.add_argument("outdir")
 

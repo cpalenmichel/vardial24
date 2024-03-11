@@ -21,7 +21,7 @@ def collapse_labels():
         for seg_idx in sorted(out_lines):
             print(seg_idx)
             cntr = Counter(out_lines[seg_idx])
-            label_proportions = {l: cntr[l] / float(sum(cntr)) for l in cntr}
+            label_proportions = {l: cntr[l] / float(sum(cntr.values())) for l in cntr}
             labels = [l for l, val in label_proportions.items() if val > args.threshold]
             print(','.join(labels), file=outfile)
 

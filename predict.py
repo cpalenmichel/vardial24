@@ -27,7 +27,7 @@ def run_eval():
     train_dataset = load_dataset('csv', data_files=[
         args.traindata,
     ], delimiter='\t',
-                                 column_names=col_names
+                                 column_names=["label", "text"]
                                  )['train']
 
     test_dataset = load_dataset('csv', data_files=[

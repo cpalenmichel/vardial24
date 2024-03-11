@@ -24,6 +24,7 @@ def train_model():
     parser.add_argument("--learning-rate", default=2e-5, type=float)
     parser.add_argument("--epochs", default=3, type=int)
     parser.add_argument("--segment", action="store_true")
+    parser.add_argument("--language", help="Which language using (so know which spacy segmenter to use)")
 
     args = parser.parse_args()
 
@@ -101,7 +102,7 @@ def train_model():
                 new_example["orig_idx"] = i
                 new_data.append(new_example)
         en_dataset["test"] = Dataset.from_list(new_data)
-    
+
     tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
 
     def tokenize_and_encode(examples):

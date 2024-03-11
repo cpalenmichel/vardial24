@@ -23,6 +23,7 @@ def train_model():
     parser.add_argument("--learning-rate", default=2e-5, type=float)
     parser.add_argument("--epochs", default=3, type=int)
     parser.add_argument("--segmented", action="store_true")
+    parser.add_argument("--eval-only", action="store_true")
     args = parser.parse_args()
 
     model_ckpt = args.model
@@ -52,7 +53,7 @@ def train_model():
         test_dataset = load_dataset('csv', data_files=[
             args.test,
         ], delimiter='\t',
-                                   column_names=col_names
+                                   column_names=["text"]
                                    )
         en_dataset = DatasetDict({"train": train_dataset["train"], "test": test_dataset['train'],
                                   "validation": dev_dataset['train']})
@@ -151,7 +152,8 @@ def train_model():
         compute_metrics=compute_metrics,
         tokenizer=tokenizer)
 
-    trainer.train()
+    if not args.eval_only:
+        trainer.train()
     trainer.evaluate()
     predictions = trainer.predict(test_dataset=ds_enc["test"])
 

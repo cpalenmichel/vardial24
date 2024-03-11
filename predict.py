@@ -16,6 +16,7 @@ def run_eval():
     parser.add_argument("outdir")
     parser.add_argument("--traindata")
     parser.add_argument("--evaldata")
+    parser.add_argument("--default-label", default="FR-FR")
 
 
     args = parser.parse_args()
@@ -79,6 +80,8 @@ def run_eval():
                     threshed_pred[np.where(probs >= 0.05)] = 1
                     pred_labels = ",".join(
                         [id2label[idx] for idx in range(len(probs)) if threshed_pred[idx] == 1])
+                if not pred_labels:
+                    pred_labels = args.default_label
                 print(f"{pred_labels}", file=outfile)
 
 

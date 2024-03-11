@@ -155,6 +155,7 @@ def train_model():
 
     if not args.eval_only:
         trainer.train()
+        trainer.model.save_pretrained(os.path.join(args.outdir, f"final_model"))
     trainer.evaluate()
     predictions = trainer.predict(test_dataset=ds_enc["test"])
 

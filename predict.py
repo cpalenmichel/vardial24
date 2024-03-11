@@ -75,6 +75,10 @@ def run_eval():
                     threshed_pred[np.where(probs >= 0.25)] = 1
                     pred_labels = ",".join(
                         [id2label[idx] for idx in range(len(probs)) if threshed_pred[idx] == 1])
+                if not pred_labels:
+                    threshed_pred[np.where(probs >= 0.05)] = 1
+                    pred_labels = ",".join(
+                        [id2label[idx] for idx in range(len(probs)) if threshed_pred[idx] == 1])
                 print(f"{pred_labels}", file=outfile)
 
 

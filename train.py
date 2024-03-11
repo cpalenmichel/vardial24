@@ -76,13 +76,13 @@ def train_model():
     # Segmentation for BCMS mainly since it contains multiple sentences
     if args.segment:
         if args.language == "EN":
-            nlp = spacy.load("en_core_web_sm")
+            nlp = spacy.load("en_core_web_sm", disable = ['tok2vec', 'morphologizer', 'lemmatizer', 'attribute_ruler', 'ner'])
         elif args.language == "ES":
-            nlp = spacy.load("es_core_news_sm")
+            nlp = spacy.load("es_core_news_sm", disable = ['tok2vec', 'morphologizer', 'lemmatizer', 'attribute_ruler', 'ner'])
         elif args.language == "PT":
-            nlp = spacy.load("pt_core_news_sm")
+            nlp = spacy.load("pt_core_news_sm", disable = ['tok2vec', 'morphologizer', 'lemmatizer', 'attribute_ruler', 'ner'])
         elif args.language == "BCMS":
-            nlp = spacy.load("hr_core_news_sm")
+            nlp = spacy.load("hr_core_news_sm", disable = ['tok2vec', 'morphologizer', 'lemmatizer', 'attribute_ruler', 'ner'])
         else:
             raise ValueError("A language must be specified for parsing")
         new_data = []

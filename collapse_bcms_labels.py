@@ -15,11 +15,11 @@ def collapse_labels():
             label = fields[0]
             seg_idx = fields[-1]
             for l in label.split(','):
-                out_lines[int(seg_idx)].append(label)
+                out_lines[int(seg_idx)].append(l)
+    print("Lines: ", len(out_lines))
 
     with open(args.outpath, 'w', encoding='utf8') as outfile:
         for seg_idx in sorted(out_lines):
-            print(seg_idx)
             cntr = Counter(out_lines[seg_idx])
             label_proportions = {l: cntr[l] / float(sum(cntr.values())) for l in cntr}
             labels = [l for l, val in label_proportions.items() if val > args.threshold]

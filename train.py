@@ -27,18 +27,22 @@ def train_model():
 
     model_ckpt = args.model
 
+    col_names = ["label", "text"]
+    if args.segmented:
+        col_names.append("seg_idx")
+
     en_dataset_path_train = args.train
     en_dataset_path_dev = args.test if args.test else args.dev
     # pd_dataset = pd.read_csv(en_dataset_path, sep='\t')
     train_dataset = load_dataset('csv', data_files=[
         en_dataset_path_train,
     ], delimiter='\t',
-                                 column_names=["label", "text"]
+                                 column_names= col_names
                                  )
     dev_dataset = load_dataset('csv', data_files=[
         en_dataset_path_dev,
     ], delimiter='\t',
-                               column_names=["label", "text"]
+                               column_names=col_names
                                )
     if not args.test:
         # "train" here as key is because hf loads all non-split datasets as "train", idk why
@@ -48,7 +52,7 @@ def train_model():
         test_dataset = load_dataset('csv', data_files=[
             args.test,
         ], delimiter='\t',
-                                   column_names=["label", "text"]
+                                   column_names=col_names
                                    )
         en_dataset = DatasetDict({"train": train_dataset["train"], "test": test_dataset['train'],
                                   "validation": dev_dataset['train']})

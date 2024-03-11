@@ -180,3 +180,23 @@ F1-score for class PT-BR: 84.98%
 F1-score for class PT-PT: 70.53%
 Macro-avg F1 score:    77.75%
 Weighted-avg F1 score: 77.75%
+
+
+BCMS Segmented and labels revived from collapsing with thresholds across sentences: 
+Evaluated file: test-bcms-collapse-.2.txt
+
+Scores for entire dataset (122 instances):
+F1-score for class bs: 76.47%
+F1-score for class hr: 75.00%
+F1-score for class me: 50.00%
+F1-score for class sr: 87.31%
+Macro-avg F1 score:    72.20%
+Weighted-avg F1 score: 79.80%
+
+Scores for ambiguous subset (25 instances):
+F1-score for class bs: 60.00%
+F1-score for class hr: 30.77%
+F1-score for class me: 30.77%
+F1-score for class sr: 80.00%
+Macro-avg F1 score:    50.38%
+Weighted-avg F1 score: 53.79%

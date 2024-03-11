@@ -72,13 +72,13 @@ def train_model():
     en_dataset['train'] = en_dataset['train'].map(
         lambda x: {label: (1 if label in x["label"].split(',') else 0) for label in label2id}
     )
-    en_dataset['dev'] = en_dataset['dev'].map(
+    en_dataset['validation'] = en_dataset['validation'].map(
         lambda x: {label: (1 if label in x["label"].split(',') else 0) for label in label2id}
     )
 
     en_dataset['train'] = en_dataset['train'].map(
         lambda x: {"labels": [x[c] for c in label2id if c != "text" and c != "label"]})
-    en_dataset['dev'] = en_dataset['dev'].map(
+    en_dataset['validation'] = en_dataset['validation'].map(
         lambda x: {"labels": [x[c] for c in label2id if c != "text" and c != "label"]})
     print(en_dataset)
 

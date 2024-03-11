@@ -1,7 +1,6 @@
 import os
 from argparse import ArgumentParser
 
-import spacy
 import torch
 from datasets import load_dataset, DatasetDict, Dataset
 from transformers import AutoTokenizer, EvalPrediction
@@ -23,8 +22,6 @@ def train_model():
     parser.add_argument("--batchsize", default=8, type=int)
     parser.add_argument("--learning-rate", default=2e-5, type=float)
     parser.add_argument("--epochs", default=3, type=int)
-    parser.add_argument("--segment", action="store_true")
-    parser.add_argument("--language", help="Which language using (so know which spacy segmenter to use)")
 
     args = parser.parse_args()
 
@@ -73,38 +70,6 @@ def train_model():
         lambda x: {"labels": [x[c] for c in label2id if c != "text" and c != "label"]})
     print(en_dataset)
 
-    # Segmentation for BCMS mainly since it contains multiple sentences
-    if args.segment:
-        if args.language == "EN":
-            nlp = spacy.load("en_core_web_sm", disable = ['tok2vec', 'morphologizer', 'lemmatizer', 'attribute_ruler', 'ner'])
-        elif args.language == "ES":
-            nlp = spacy.load("es_core_news_sm", disable = ['tok2vec', 'morphologizer', 'lemmatizer', 'attribute_ruler', 'ner'])
-        elif args.language == "PT":
-            nlp = spacy.load("pt_core_news_sm", disable = ['tok2vec', 'morphologizer', 'lemmatizer', 'attribute_ruler', 'ner'])
-        elif args.language == "BCMS":
-            nlp = spacy.load("hr_core_news_sm", disable = ['tok2vec', 'morphologizer', 'lemmatizer', 'attribute_ruler', 'ner'])
-        else:
-            raise ValueError("A language must be specified for parsing")
-        new_data = []
-        for i, example in enumerate(en_dataset["train"]):
-            doc = nlp(example["text"])
-            for sent in doc.sents:
-                new_example  = example.copy()
-                new_example["text"] = sent.text
-                new_example["orig_idx"] = i
-                new_data.append(new_example)
-        en_dataset["train"] = Dataset.from_list(new_data)
-
-        new_data = []
-        for i, example in enumerate(en_dataset["test"]):
-            doc = nlp(example["text"])
-            for sent in doc.sents:
-                new_example = example.copy()
-                new_example["text"] = sent.text
-                new_example["orig_idx"] = i
-                new_data.append(new_example)
-        en_dataset["test"] = Dataset.from_list(new_data)
-        print("Segmented: ", en_dataset)
     tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
 
     def tokenize_and_encode(examples):
@@ -193,12 +158,6 @@ def train_model():
             threshed_pred = np.zeros(probs.shape)
             threshed_pred[np.where(probs >= 0.5)] = 1
             print(",".join([id2label[idx]  for idx in range(len(pred)) if threshed_pred[idx] == 1]), file=outfile)
-
-    if args.segment:
-        for split in en_dataset:
-            with open(os.path.join(args.outdir, f'orig_mapping.{split}.tsv'), 'w', encoding='utf8') as outfile:
-                for example in en_dataset[split]:
-                    print(f"{example['orig_idx']}\t{example['label']}\t{example['text']}", outfile)
 
 
 if __name__ == "__main__":

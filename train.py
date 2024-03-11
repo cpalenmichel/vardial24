@@ -60,8 +60,6 @@ def train_model():
 
     label_set = set()
     for split in en_dataset:
-        if split == "test":
-            continue
         for example in en_dataset[split]:
             for lab in example["label"].split(","):
                 label_set.add(lab)
@@ -69,17 +67,13 @@ def train_model():
     id2label = {i: label for i, label in enumerate(sorted(label_set))}
     label2id = {label: idx for idx, label in id2label.items()}
 
-    en_dataset['train'] = en_dataset['train'].map(
-        lambda x: {label: (1 if label in x["label"].split(',') else 0) for label in label2id}
-    )
-    en_dataset['validation'] = en_dataset['validation'].map(
+    en_dataset = en_dataset.map(
         lambda x: {label: (1 if label in x["label"].split(',') else 0) for label in label2id}
     )
 
-    en_dataset['train'] = en_dataset['train'].map(
+    en_dataset = en_dataset.map(
         lambda x: {"labels": [x[c] for c in label2id if c != "text" and c != "label"]})
-    en_dataset['validation'] = en_dataset['validation'].map(
-        lambda x: {"labels": [x[c] for c in label2id if c != "text" and c != "label"]})
+
     print(en_dataset)
 
     tokenizer = AutoTokenizer.from_pretrained(model_ckpt)

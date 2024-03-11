@@ -22,7 +22,7 @@ def train_model():
     parser.add_argument("--batchsize", default=8, type=int)
     parser.add_argument("--learning-rate", default=2e-5, type=float)
     parser.add_argument("--epochs", default=3, type=int)
-
+    parser.add_argument("--segmented", action="store_true")
     args = parser.parse_args()
 
     model_ckpt = args.model

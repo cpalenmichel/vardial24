@@ -28,11 +28,11 @@ def run_eval():
         args.traindata,
     ], delimiter='\t',
                                  column_names=col_names
-                                 )
+                                 )['train']
 
     test_dataset = load_dataset('csv', data_files=[
         args.evaldata,
-    ], delimiter='\t', column_names=col_names)
+    ], delimiter='\t', column_names=col_names)['train']
 
     def tokenize_and_encode(examples):
         return tokenizer(examples["text"], truncation=True)

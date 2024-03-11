@@ -31,7 +31,7 @@ def run_eval():
                                  )
 
     test_dataset = load_dataset('csv', data_files=[
-        args.infilepath,
+        args.evaldata,
     ], delimiter='\t', column_names=col_names)
 
     def tokenize_and_encode(examples):

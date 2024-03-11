@@ -62,7 +62,7 @@ def run_eval():
     with torch.no_grad():
         with open(os.path.join(args.outdir, 'bcms_segmented_predictions.txt'), 'w', encoding='utf8') as outfile:
             for ex in test_dataset:
-                logits = model(ex.input_ids)
+                logits = model({'input_ids': ex['input_ids'], 'attention_mask': ex['attention_mask']})
                 probs = sigmoid(torch.Tensor(logits))
                 threshed_pred = np.zeros(probs.shape)
                 threshed_pred[np.where(probs >= 0.5)] = 1

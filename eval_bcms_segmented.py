@@ -32,7 +32,7 @@ def run_eval():
 
     test_dataset = load_dataset('csv', data_files=[
         args.evaldata,
-    ], delimiter='\t', column_names=col_names)['train']
+    ], delimiter='\t', column_names=["text", "seg_idx"])['train']
 
     def tokenize_and_encode(examples):
         return tokenizer(examples["text"], truncation=True)
